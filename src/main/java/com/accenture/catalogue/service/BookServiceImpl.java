@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
 		Book book = repository.findById(id);
 		if (book == null) {
 			logger.error("No Book Found with the ID: " + id);
-			throw new NoDataException("Record not found with Id: " + id);
+			throw new NoDataException("Record not found");
 		}
 
 		repository.deleteBook(book);
@@ -52,7 +52,7 @@ public class BookServiceImpl implements BookService {
 		Book book = repository.findById(id);
 		if (book == null) {
 			logger.error("No Book Found with the ID: " + id);
-			throw new NoDataException("Record not found with Id: " + id);
+			throw new NoDataException("Record not found");
 		}
 		book.setTitle(bookDetails.getTitle());
 		book.setAuthor(bookDetails.getAuthor());
