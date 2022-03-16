@@ -46,11 +46,11 @@ public class BookRepositoryImpl implements BookRepository {
 		Root<Book> root = cq.from(Book.class);
 		
 		if(StringUtils.hasText(title)) {
-			Predicate titleLike = cb.like(cb.lower(root.get("titledfsd")),  "%"+ title.toLowerCase() + "%");
+			Predicate titleLike = cb.like(cb.lower(root.get("title")),  "%"+ title.toLowerCase() + "%");
 			cq.where(titleLike);
 		}
 		if(StringUtils.hasText(author)) {
-			Predicate authorLike = cb.like(cb.lower(root.get("authordsfds")),  "%"+ author.toLowerCase() + "%");
+			Predicate authorLike = cb.like(cb.lower(root.get("author")),  "%"+ author.toLowerCase() + "%");
 			cq.where(authorLike);
 		}
 		if(StringUtils.hasText(isbn)) {
