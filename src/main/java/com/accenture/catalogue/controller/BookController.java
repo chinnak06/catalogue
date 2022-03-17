@@ -41,7 +41,6 @@ public class BookController {
 	@PostMapping
 	public ResponseEntity<Object> addBook(@Valid @RequestBody BookDetails book) {
 		BookDetails newBook = service.addBook(book);
-		System.out.println("Checking");
 		ResponseEntity<Object> response = new ResponseEntity<>(newBook, HttpStatus.CREATED);
 
 		return response;
