@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: catalogue-service
-        image: 361612195873.dkr.ecr.us-east-1.amazonaws.com/catalogue-repo:${BUILD_NUMBER}
+        image: 361612195873.dkr.ecr.us-east-1.amazonaws.com/catalogue-repo:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8085
