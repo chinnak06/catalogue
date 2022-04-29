@@ -1,0 +1,36 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
+      - curl -sS -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl ./aws-iam-authenticator
+      - export PATH=$PWD/:$PATH
+      - apt-get update && apt-get -y install jq python3-pip python3-dev && pip3 install --upgrade awscli
+      
+  pre_build:
+    commands:
+       - echo $IMAGE_TAG
+       - echo $CONTAINER_REPOSITORY_URI
+       - echo $CONTAINER_REPO_NAME
+       - echo $CONTAINER_REPOSITORY_URI/$CONTAINER_REPO_NAME:$IMAGE_TAG
+       - sed -i 's@CONTAINER_IMAGE@'"$CONTAINER_REPOSITORY_URI/$CONTAINER_REPO_NAME:$IMAGE_TAG"'@' deployment.yml
+      
+  build:
+    commands:
+      - mvn install
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $CONTAINER_REPOSITORY_URI
+      - docker build -t $CONTAINER_REPO_NAME .
+      - docker tag $CONTAINER_REPO_NAME:$IMAGE_TAG $CONTAINER_REPOSITORY_URI/$CONTAINER_REPO_NAME:$IMAGE_TAG
+      - docker push $CONTAINER_REPOSITORY_URI/$CONTAINER_REPO_NAME:$IMAGE_TAG
+    
+  post_build:
+    commands:
+      - aws eks update-kubeconfig --name $CLUSTER_NAME --region $REGION
+      - kubectl apply -f service.yml
+      - kubectl apply -f deployment.yml
+      
+artifacts:
+  files:
+  
