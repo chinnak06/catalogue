@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: catalogue-service
+  name: catalogue-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: catalogue-service
+  template:
+    metadata:
+      labels:
+        app: catalogue-service
+    spec:
+      containers:
+      - name: catalogue-service
+        image: 293281137840.dkr.ecr.us-east-1.amazonaws.com/catalogue-repo:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        
